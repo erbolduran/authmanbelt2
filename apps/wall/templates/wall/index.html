@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wall</title>
+</head>
+<body>
+	<h1>Welcome, {{ user.first_name }}!</h1>
+	<a href="{% url 'logout' %}">Log Out!</a>
+
+	<form action="{% url 'message' %}" method="POST">
+		{% csrf_token %}
+		<label for="message">Messages:</label>
+		<input type="textarea" name="message" />
+		<input type="submit" value="Submit"></input>
+	</form>
+
+	{% for each in others %}
+	{% if each.content != None %}
+	{% if each.user.id != request.session.user_id %}
+	<form action="{% url 'favorite' %}" method="POST">
+		{% csrf_token %}
+		{{each.user.first_name}} {{each.user.last_name}}: {{each.content}}<input type="hidden" name="receiver" value="{{each.id}}">
+		<input type="submit" value="Ok!"></input>	
+	</form>
+	{% endif %}
+	{% endif %}
+	{% endfor %}
+
+		
+</body>
+</html>
